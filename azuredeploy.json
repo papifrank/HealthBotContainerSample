@@ -10,6 +10,14 @@
                 
             }
         },
+        "platform":{
+            "type":"string",
+            "defaultValue":"linux",
+            "allowedValues":[
+                "linux",
+                "windows"
+            ]
+        },
         "skuName": {
             "type": "string",
             "defaultValue": "P1V2",
@@ -107,7 +115,7 @@
             "name": "[variables('hostingPlanName')]",
             "type": "Microsoft.Web/serverfarms",
             "location": "[parameters('siteLocation')]",
-            "kind": "linux",
+            "kind": "[if(equals(parameters('platform'), 'linux'), 'linux','app')]",
             "sku": {
                 "Name": "[variables('skuCode')]"
             },
