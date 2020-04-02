@@ -67,6 +67,7 @@
     },
     "resources": [
         {
+            "condition":"[equals(parameters('platform'),'linux')]",
             "apiVersion": "2018-02-01",
             "name": "[parameters('siteName')]",
             "type": "Microsoft.Web/sites",
@@ -78,6 +79,50 @@
                 "name": "[parameters('siteName')]",
                 "siteConfig": {
                     "linuxFxVersion": "[variables('linuxFxVersion')]",
+                    "alwaysOn": "[variables('alwaysOn')]",
+                    "appSettings": [
+                        {
+                        "name": "APP_SECRET",
+                        "value": "[parameters('appSecret')]"
+                        },
+                        {
+                        "name": "WEBCHAT_SECRET",
+                        "value": "[parameters('webchatSecret')]"
+                        }
+                    ]
+                },
+                "serverFarmId": "[resourceId('Microsoft.Web/serverfarms', variables('hostingPlanName'))]",
+                "clientAffinityEnabled": false
+            },
+            "resources": [
+                {
+                    "type": "sourcecontrols",
+                    "apiVersion": "2018-02-01",
+                    "name": "web",
+                    "location": "[parameters('siteLocation')]",
+                    "dependsOn": [
+                        "[resourceId('Microsoft.Web/sites', parameters('siteName'))]"
+                    ],
+                    "properties": {
+                        "repoUrl": "[variables('repoURL')]",
+                        "branch": "[variables('branch')]",
+                        "isManualIntegration": true
+                    }
+                }
+            ]
+        },
+        {
+            "apiVersion": "2018-02-01",
+            "condition":"[equals(parameters('platform'),'windows')]",
+            "name": "[parameters('siteName')]",
+            "type": "Microsoft.Web/sites",
+            "location": "[parameters('siteLocation')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Web/serverfarms/', variables('hostingPlanName'))]"
+            ],
+            "properties": {
+                "name": "[parameters('siteName')]",
+                "siteConfig": {
                     "alwaysOn": "[variables('alwaysOn')]",
                     "appSettings": [
                         {
