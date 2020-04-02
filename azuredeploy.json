@@ -115,7 +115,7 @@
             "name": "[variables('hostingPlanName')]",
             "type": "Microsoft.Web/serverfarms",
             "location": "[parameters('siteLocation')]",
-            "kind": "app",
+            "kind": "[if(equals(parameters('platform'), 'linux'), 'linux','app')]",
             "sku": {
                 "Name": "[variables('skuCode')]"
             },
