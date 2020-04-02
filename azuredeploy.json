@@ -114,7 +114,7 @@
         {
             "apiVersion": "2018-02-01",
             "condition":"[equals(parameters('platform'),'windows')]",
-            "name": "[parameters('siteName')]",
+            "name": "[concat(parameters('siteName'),'-windows')]",
             "type": "Microsoft.Web/sites",
             "location": "[parameters('siteLocation')]",
             "dependsOn": [
